@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD4B38CA2565745500354746 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = AD4B38C92565745500354746 /* main.c */; };
+		AD4B38D42565747D00354746 /* BookManagementSystem.c in Sources */ = {isa = PBXBuildFile; fileRef = AD4B38D32565747D00354746 /* BookManagementSystem.c */; };
+		AD4B38D72566B47B00354746 /* example.c in Sources */ = {isa = PBXBuildFile; fileRef = AD4B38D62566B47B00354746 /* example.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +25,10 @@
 
 /* Begin PBXFileReference section */
 		AD4B38C62565745500354746 /* BMS3.5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BMS3.5; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD4B38C92565745500354746 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		AD4B38D22565747D00354746 /* BookManagementSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookManagementSystem.h; sourceTree = "<group>"; };
+		AD4B38D32565747D00354746 /* BookManagementSystem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BookManagementSystem.c; sourceTree = "<group>"; };
+		AD4B38D62566B47B00354746 /* example.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = example.c; sourceTree = "<group>"; };
+		AD4B38DB25679C4B00354746 /* ID.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ID.txt; path = /Users/derekchan/Desktop/BMS3.5/BMS3.5/ID.txt; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +61,10 @@
 		AD4B38C82565745500354746 /* BMS3.5 */ = {
 			isa = PBXGroup;
 			children = (
-				AD4B38C92565745500354746 /* main.c */,
+				AD4B38D22565747D00354746 /* BookManagementSystem.h */,
+				AD4B38DB25679C4B00354746 /* ID.txt */,
+				AD4B38D32565747D00354746 /* BookManagementSystem.c */,
+				AD4B38D62566B47B00354746 /* example.c */,
 			);
 			path = BMS3.5;
 			sourceTree = "<group>";
@@ -118,7 +125,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD4B38CA2565745500354746 /* main.c in Sources */,
+				AD4B38D72566B47B00354746 /* example.c in Sources */,
+				AD4B38D42565747D00354746 /* BookManagementSystem.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
