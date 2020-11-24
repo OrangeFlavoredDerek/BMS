@@ -51,18 +51,15 @@ void TypingInfo(char *fp){
     FILE *file;
     FILE *fileTemp;
     char *fpTemp = "tmp.txt";
-    int res, ISBN, xISBN;
+    int res, ISBN = 0, xISBN;
     char title[20], author[30], publisher[40];
     int i;
     char t[20], a[30], p[40];
     file = fopen(fp, "r");
     fileTemp = fopen(fpTemp, "w");
-    if (file == NULL) {
-        printf("打开文件失败\n");
-        return;
-    }
-    printf("请输入ISBN号：\n");
-    scanf("%d", &ISBN);
+    IsNULL(file);
+//    printf("请输入ISBN号：\n");
+//    scanf("%d", &ISBN);
     
     while (1) {
         res = fscanf(file, "%d %s %s %s\n", &xISBN, title, author, publisher);
@@ -127,10 +124,7 @@ void DeleteBookInfo(char *fp){
     file = fopen(fp, "r");
     fileTemp = fopen(fpTemp, "w");
     
-    if (file == NULL) {
-        printf("打开文件失败\n");
-        return;
-    }
+    IsNULL(file);
     
     printf("请输入ISBN号：\n");
     scanf("%d", &ISBN);
@@ -167,10 +161,7 @@ void Query(char *fp) {
     char title[20], authur[30], publisher[40];
     file = fopen(fp, "r");
     
-    if (file == NULL){
-        printf("文件打开失败\n");
-        return;
-    }
+    IsNULL(file);
     printf("请输入ISBN号: \n");
     scanf("%d", &ISBN);
     
@@ -235,6 +226,31 @@ void ModifyBookInfo(char *fp) {
     }
 }
 
+//MARK: -导入文件
+void Export(char *fp) {
+    FILE *a, *b;
+    char temp[100];
+    char z[70] = "      ISBN号       书名       作者      出版社";
+    char fpTemp[20];
+    
+    printf("请输入导出的文件名：\n");
+    scanf("%s", fpTemp);
+    a = fopen(fp, "r");
+    b = fopen(fpTemp, "w");
+    
+    IsNULL(a);
+    fprintf(b, "%s\n", z);
+    while (1) {
+        char *p = fgets(temp, 50, a);
+        if (p == NULL) {
+            break;
+        }
+        fputs(temp, b);
+    }
+    printf("导出成功！\n");
+    fclose(a);
+    fclose(b);
+}
 
 
 #endif /* BookManagementSystem_h */

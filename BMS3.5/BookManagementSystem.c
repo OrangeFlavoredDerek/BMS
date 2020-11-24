@@ -16,7 +16,6 @@ int main(){
     int flag = 0;
 
     while (flag == 0) {
-        Menu();
         switch (Menu()) {
             case 1:
                 Import(fileName);
@@ -31,6 +30,9 @@ int main(){
                 DeleteBookInfo(fileName);
             case 5:
                 ModifyBookInfo(fileName);
+                break;
+            case 6:
+                Export(fileName);
                 break;
 
             case 7:
