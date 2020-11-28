@@ -9,21 +9,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "SignUp:In.h"
 
 //MARK: -开始界面
 void startSystem() {
     int cmd, end = 0;
     while (1) {
-        system("cls");
-        printf("\n\n\n\n\n\n\n");
+        printf("\n\n\n");
         printf("**************************************************************");
         printf("\n图书馆管理系统\n");
         printf("1.管理员登陆\n");
         printf("2.管理员注册\n");
         printf("0.退出\n");
         printf("**************************************************************");
-        printf("\n\n\n\n\n\n\n");
+        printf("\n\n\n");
         printf("输入你需要进行的操作: ");
         scanf("%d", &cmd);
         getchar();
