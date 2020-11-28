@@ -20,6 +20,81 @@
 #include <stdio.h>
 #include <string.h>
 
+struct Login {
+    int Account;
+    char Password[20];
+    struct Login *Next;
+};
+
+//MARK: -登陆页面
+void LoginMenu(){
+    printf("\n\n\t    欢迎使用图书管理员登录系统\n\n");
+    printf("**********************************************");
+    printf("\n\n\t\t1.登录系统\n\n");
+    printf("\n\n\t\t2.创建账号\n\n");
+    printf("\n\n\t\t3.修改密码\n\n");
+    printf("\n\n\t\t4.退出系统\n\n");
+    printf("\n\n\t    请按键选择，回车确定\n");
+    printf("**********************************************");
+    return ;
+}
+
+void LoginMain(){
+    void LoginMenu(void);
+    
+}
+
+//MARK: -注册管理员账号
+void SignUp(){
+    FILE *fp;
+    int account;
+    char password[20], password1[20];
+    char hit = 0;
+    if ((fp = fopen("land.txt","r")) == NULL) {
+        fp = fopen("land.txt", "w");
+        fclose(fp);
+    }
+    fp = fopen("land.txt", "a");
+    for (; ; ) {
+        printf("\n请按以下格式输入账户:\n学号 密码\n");
+        printf("请输入:");
+        scanf("%d %s",&account,password);
+        printf("再次输入密码:\n");
+        scanf("%s",password1);
+        
+        if(strcmp(password,password1)==0) {
+            fprintf(fp,"%d %s\n",account,password);
+            break;
+        } else {
+            printf("两次输入密码不一致，继续创建按回车，退出按ESC");
+//            hit=getch();
+            if(hit == 27) {
+                LoginMain();
+            }
+        }
+    }
+    fclose(fp);
+    printf("创建成功！按任意键返回\n");
+    LoginMain();
+}
+
+//MARK: -匹配数据库中的账号密码
+int Match(int m, char a[20]) {
+    FILE *fp;
+    int n = 0, i = 0;
+    int account;
+    char password[20];
+    
+    if ((fp = fopen("land.txt", "r")) == NULL) {
+        printf("\n还未存在帐户，请注册帐户！\n");
+        LoginMain();
+    }
+    
+//    for (; foef; <#increment#>) {
+//        <#statements#>
+//    }
+}
+
 void IsNULL(FILE *file) {
     if (file == NULL) {
         printf("打开文件夹失败\n");

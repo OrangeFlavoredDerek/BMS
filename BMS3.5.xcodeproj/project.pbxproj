@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD35F1D8256D5819001B5302 /* BMS4.c in Sources */ = {isa = PBXBuildFile; fileRef = AD35F1D7256D5819001B5302 /* BMS4.c */; };
 		AD4B38D42565747D00354746 /* BookManagementSystem.c in Sources */ = {isa = PBXBuildFile; fileRef = AD4B38D32565747D00354746 /* BookManagementSystem.c */; };
-		AD4B392F256C05B000354746 /* LoginSystem.h in Sources */ = {isa = PBXBuildFile; fileRef = AD4B392E256C05B000354746 /* LoginSystem.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,11 +25,12 @@
 
 /* Begin PBXFileReference section */
 		AD35F1BB256C891F001B5302 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		AD35F1D6256D5819001B5302 /* BMS4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMS4.h; sourceTree = "<group>"; };
+		AD35F1D7256D5819001B5302 /* BMS4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BMS4.c; sourceTree = "<group>"; };
 		AD4B38C62565745500354746 /* BMS3.5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BMS3.5; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4B38D22565747D00354746 /* BookManagementSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookManagementSystem.h; sourceTree = "<group>"; };
 		AD4B38D32565747D00354746 /* BookManagementSystem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BookManagementSystem.c; sourceTree = "<group>"; };
 		AD4B38DB25679C4B00354746 /* ID.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ID.txt; path = /Users/derekchan/Desktop/BMS3.5/BMS3.5/ID.txt; sourceTree = "<absolute>"; };
-		AD4B392E256C05B000354746 /* LoginSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginSystem.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,9 +65,10 @@
 			children = (
 				AD35F1BB256C891F001B5302 /* README.md */,
 				AD4B38D22565747D00354746 /* BookManagementSystem.h */,
-				AD4B392E256C05B000354746 /* LoginSystem.h */,
 				AD4B38D32565747D00354746 /* BookManagementSystem.c */,
 				AD4B38DB25679C4B00354746 /* ID.txt */,
+				AD35F1D6256D5819001B5302 /* BMS4.h */,
+				AD35F1D7256D5819001B5302 /* BMS4.c */,
 			);
 			path = BMS3.5;
 			sourceTree = "<group>";
@@ -127,8 +129,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD4B392F256C05B000354746 /* LoginSystem.h in Sources */,
 				AD4B38D42565747D00354746 /* BookManagementSystem.c in Sources */,
+				AD35F1D8256D5819001B5302 /* BMS4.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

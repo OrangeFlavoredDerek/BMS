@@ -10,10 +10,13 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include "BookManagementSystem.h"
+#include "LoginSystem.h"
 
 int main(){
     char *fileName = "ID.txt";
     int flag = 0;
+    
+    LoginMenu();
 
     while (flag == 0) {
         switch (Menu()) {
@@ -34,9 +37,8 @@ int main(){
             case 6:
                 Export(fileName);
                 break;
-
             case 7:
-                printf("退出系统\n");
+                printf("感谢使用\n");
                 break;
         }
     }
