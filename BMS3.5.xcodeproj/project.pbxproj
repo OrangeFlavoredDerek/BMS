@@ -27,6 +27,8 @@
 		AD35F1D6256D5819001B5302 /* BMS4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMS4.h; sourceTree = "<group>"; };
 		AD35F1D7256D5819001B5302 /* BMS4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BMS4.c; sourceTree = "<group>"; };
 		AD4B38C62565745500354746 /* BMS3.5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BMS3.5; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADB8F9162572106700AA46FE /* admin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = admin.txt; sourceTree = SOURCE_ROOT; };
+		ADB8F9172572106700AA46FE /* book.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = book.txt; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,8 @@
 			children = (
 				AD35F1BB256C891F001B5302 /* README.md */,
 				AD35F1D6256D5819001B5302 /* BMS4.h */,
+				ADB8F9162572106700AA46FE /* admin.txt */,
+				ADB8F9172572106700AA46FE /* book.txt */,
 				AD35F1D7256D5819001B5302 /* BMS4.c */,
 			);
 			path = BMS3.5;

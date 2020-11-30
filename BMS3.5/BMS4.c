@@ -25,8 +25,7 @@ void startSystem() {
         printf("输入你需要进行的操作: ");
         scanf("%d", &cmd);
         getchar();
-        switch (cmd)
-        {
+        switch (cmd){
         case 1:
             adminLogin();
             break;
@@ -44,7 +43,24 @@ void startSystem() {
     }
 }
 
+
 int main() {
+    FILE *fp;
+    adminHead = (Admin*)malloc(sizeof(Admin));
+    bookHead = (Book*)malloc(sizeof(Book));
+    
+    fp = fopen("admin", "a+");
+    adminCount = fread(adminHead, sizeof(Admin), 1, fp);
+    fclose(fp);
+    adminEnd = adminHead;
+    ReadAdminFile();
+    
+    fp = fopen("book", "a+");
+    bookCount = fread(bookHead, sizeof(Book), 1, fp);
+    fclose(fp);
+    bookEnd = bookHead;
+    ReadBookFile();
+    
     startSystem();
     return 0;
 }
