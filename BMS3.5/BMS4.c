@@ -19,7 +19,6 @@ void startSystem() {
         printf("\n图书馆管理系统\n");
         printf("1.管理员登陆\n");
         printf("2.管理员注册\n");
-        printf("3.修改密码\n");
         printf("0.退出\n");
         printf("**************************************************************");
         printf("\n\n\n");
@@ -32,9 +31,6 @@ void startSystem() {
                 break;
             case 2:
                 adminRegister();
-                break;
-            case 3:
-                changeThePassword();
                 break;
             case 0:
                 end = 1;

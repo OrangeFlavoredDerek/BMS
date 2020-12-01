@@ -24,20 +24,19 @@
 
 //管理员信息
 typedef struct AdminInfo {
-    char adminName[100];
-    char password[100];
+    char adminName[1000];//管理员账号名称
+    char password[1000];//管理员账号密码
     struct AdminInfo *next;
 } Admin;
 
 //书籍信息
 typedef struct BookInfo {
-    int id;
-    char bookname[100];
-    char author[100];
-    int year;
-    int month;
-    int day;
-    int count;
+    int id;//书籍号
+    char bookname[1000];//书名
+    char author[1000];//作者
+    int year;//出版年份
+    int month;//出版月份
+    int count;//书籍
     struct BookInfo *next;
 } Book;
 
@@ -45,6 +44,7 @@ Admin *adminHead = NULL, *adminEnd = NULL;
 Book *bookHead = NULL, *bookEnd = NULL;
 long int adminCount, bookCount;
 
+//加载动画函数
 //void logtime(char *c,int n) {
 //    int i;
 //    for(i=0;i<n;i++) {
@@ -53,30 +53,8 @@ long int adminCount, bookCount;
 //    }
 //}
 
-int isExist(char *Account, int flag){
-    if (flag == 1) {
-        Admin *p;
-        p = adminHead;
-        while (p != NULL) {
-            if (strcmp(Account, p->adminName) == 0) {
-                return 1;
-            }
-            p = p->next;
-        }
-    } else if (flag == 2) {
-        Book *p;
-        p = bookHead;
-        while (p != NULL) {
-            if (strcmp(Account, p->bookname) == 0) {
-                return 1;
-            }
-            p = p->next;
-        }
-    }
-    return 0;
-}
-
-void writefile(int flag) {
+//MARK: -写入文件
+void WriteFile(int flag) {
     FILE *fp;
     Admin *adminp;
     Book *bookp;
@@ -85,30 +63,31 @@ void writefile(int flag) {
     bookp = bookHead;
  
     if (flag == 1) {
-        fp = fopen("admin", "w");
+        fp = fopen("admin", "w");//打开管理员文件
         while (adminp != NULL){
-            fwrite(adminp, sizeof(Admin), 1, fp);
+            fwrite(adminp, sizeof(Admin), 1, fp);//写入信息
             adminp = adminp->next;
         }
     } else {
-        fp = fopen("book", "w");
+        fp = fopen("book", "w");//打开书籍文件
         while (bookp != NULL) {
-            fwrite(bookp, sizeof(Book), 1, fp);
+            fwrite(bookp, sizeof(Book), 1, fp);//写入书籍信息
             bookp = bookp->next;
         }
     }
-    fclose(fp);
+    fclose(fp);//关闭文件
 }
 
+//MARK: -读取管理员文件
 void ReadAdminFile(){
     Admin *p;
     FILE *fp;
     
     p = adminHead;
-    fp = fopen("admin", "ab+");
+    fp = fopen("admin", "ab+");//打开文件
     while (fread(p, sizeof(Admin), 1, fp)){
         if (p->next != NULL){
-            p = (Admin*)malloc(sizeof(Admin));
+            p = (Admin*)malloc(sizeof(Admin));//分配动态内存
             
             adminEnd->next = p;
             adminEnd = p;
@@ -122,10 +101,10 @@ void ReadBookFile(){
     FILE *fp;
     
     p = bookHead;
-    fp = fopen("book", "ab+");
+    fp = fopen("book", "ab+");//打开文件
     while (fread(p, sizeof(Book), 1, fp)){
         if (p->next != NULL){
-            p = (Book*)malloc(sizeof(Book));
+            p = (Book*)malloc(sizeof(Book));//分配动态内存
             
             bookEnd->next = p;
             bookEnd = p;
@@ -136,24 +115,21 @@ void ReadBookFile(){
 
 //MARK: -从键盘键入书籍信息
 void TypingInfo() {
-    Book *p;
-    char title[100];
-    int isExist = 0;
-    FILE *fp;
-    p = bookHead;
+    Book *p = NULL;
+    char title[1000];//从键盘键入的书名
+    int isExist = 0;//标签，判断所加入书籍是否存在
     
-    if (bookCount == 0) {
+    if (bookCount == 0) {//当书籍数量为0时
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
-            if (strlen(title) > 100) {
+            if (strlen(title) > 1000) {
                 printf("书名过长\n");
                 printf("请重新输入书名：");
-                gets(title);
             } else {
                 break;
             }
         }
-        strcpy(bookHead->bookname, title);
+        strcpy(bookHead->bookname, title);//strcpy()字符串复制函数
         printf("书号: ");
         scanf("%d", &bookHead->id);
         printf("作者: ");
@@ -162,39 +138,37 @@ void TypingInfo() {
         scanf("%d", &bookHead->year);
         printf("出版月份: ");
         scanf("%d", &bookHead->month);
-//        printf("bookday: ");
-//        scanf("%d", &bookHead->day);
         printf("书籍数量: ");
         scanf("%d", &bookHead->count);
         
         bookEnd = bookHead;
         bookEnd->next = NULL;
-    } else {
+    } else {//数据库中已经存在书籍时
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
-            if (strlen(title) > 100) {
+            if (strlen(title) > 1000) {
                 printf("书名过长\n请重新输入：");
-                gets(title);
             } else {
                 break;
             }
         }
+        p = bookHead;
         
         while (p != NULL) {
-            if (strcmp(title, p->bookname) == 0) {
-                isExist = 1;
+            if (strcmp(title, p->bookname) == 0) {//strcmp()字符串比较函数，当两字符串相同时返回0
+                isExist = 1;//书籍已存在
                 break;
             }
             p = p->next;
         }
-        if (isExist == 1) {
+        if (isExist == 1) {//当所添加书籍已经存在时
             int count;
             
             printf("输入新添书籍的数量: ");
             scanf("%d", &count);
-            p->count += count;
-        } else {
-            p = (Book*)malloc(sizeof(Book));
+            p->count += count;//仅添加改书籍数量
+        } else {//若未存在
+            p = (Book*)malloc(sizeof(Book));//分配动态内存
             
             strcpy(p->bookname, title);
             printf("id: ");
@@ -215,51 +189,36 @@ void TypingInfo() {
     }
     bookCount++;
     
-    fp = fopen("book", "w");
-    while (p != NULL) {
-        fwrite(p, sizeof(Book), 1, fp);
-        p = p->next;
-    }
-    fclose(fp);
+    WriteFile(2);
     
     printf("书籍添加成功\n");
+    printf("自动返回管理员界面...\n");
+    //logtime();
 }
 
 //MARK: -查询图书信息
 void QueryBook() {
     Book *p;
-    char title[100];
-    int exist = 0, xID = 0, tag = 0, n;
+    int exist = 0, xID = 0, n;
     
     printf("\n\n\n");
-    printf("\n通过书名号查询或书名查询：\n ");
-    printf("\n1.书名\n2.书名号\n");
-    printf("请选择：");
-    scanf("%d", &tag);
-    switch (tag) {
-        case 1:
-            printf("请输入所要查找书名：");
-            gets(title);
-            break;
-        case 2:
-            printf("请输入所要查找书号：");
-            scanf("%d", &xID);
-            break;
-    }
+    printf("\n请输入书名号查询：\n ");
+    printf("请输入所要查找书号：");
+    scanf("%d", &xID);
     printf("\n\n\n");
     
     p = bookHead;
     while (p != NULL) {
-        if (strcmp(p->bookname, title) == 0 || p->id == xID) {
+        if (p->id == xID) {
             printf("**************************************************************");
-            printf("\nbookname: ");
+            printf("书籍名称: ");
             puts(p->bookname);
-            printf("bookid: %d\n", p->id);
-            printf("author: %s\n", p->author);
-            printf("year/month: %d/%d\n", p->year, p->month);
-            printf("bookcount: %d\n", p->count);
+            printf("书号: %d\n", p->id);
+            printf("作者: %s\n", p->author);
+            printf("出版时间: %d/%d\n", p->year, p->month);
+            printf("书籍数量: %d\n", p->count);
             printf("**************************************************************\n");
-            exist = 1;
+            exist = 1;//1表示已找到书籍
             break;
         }
         p = p->next;
@@ -279,65 +238,66 @@ void QueryBook() {
 //MARK: -删除图书信息
 void DeleteBookInfo() {
     Book *p;
-    char title[100];
-    int Exist = 0;
+    char title[1000];//从键盘键入的书名
+    int Exist = 0;//标签，判断书籍是否存在
     
     p = bookHead;
     printf("请输入你要删除的书籍名称：");
     while (gets(title)){
         while (p != NULL){
             if (strcmp(title, p->bookname) == 0){
-                Exist = 1;
+                Exist = 1;//1为书籍存在
                 break;
             }
             p = p->next;
         }
-        if (!Exist){
+        if (!Exist){//若改书籍不存在
             printf("不存在此书籍名称的书籍...\n");
             printf("请重新输入: ");
         } else {
             break;
         }
     }
-
+//删除书籍
     p = bookHead;
     if (strcmp(bookHead->bookname, title) == 0){
-        bookHead = bookHead->next;
+        bookHead = bookHead->next;//删除链表内元素
     }
-    while (p->next != NULL){
-        if (strcmp(p->next->bookname, title) == 0){
-            p->next = p->next->next;
-            break;
-        }
-        p = p->next;
-    }
+//    while (p->next != NULL){
+//        if (strcmp(p->next->bookname, title) == 0){
+//            p->next = p->next->next;
+//            break;
+//        }
+//        p = p->next;
+//    }
     p = NULL;
-    writefile(2);
+    WriteFile(2);//写入文件
+    printf("删除成功！\n");
 }
 
 //MARK: -修改图书信息
 void ModifyBookInfo() {
     Book *p;
-    char title[100], bookAuthur[100];
+    char title[1000], bookAuthur[1000];
     int exist = 0, end = 0;
     int bYear, bMonth, bID, count;
     
     p = bookHead;
     printf("书籍列表:\n");
     while (p != NULL) {
-        printf("bookname: %10s\n", p->bookname);
+        printf("%10s\n", p->bookname);//现实数据库内所有存储书籍
         p = p->next;
     }
     
     p = bookHead;
     printf("输入你需要修改的书籍名称(按@退出): ");
     while (gets(title)) {
-        if (strcmp(title, "@") == 0) {
+        if (strcmp(title, "@") == 0) {//当从键盘键入@时结束
             break;
         }
         while (p != NULL){
             if (strcmp(p->bookname, title) == 0){
-                exist = 1;
+                exist = 1;//要修改的书籍在数据库中存在
                 break;
             }
             p = p->next;
@@ -403,26 +363,59 @@ void ModifyBookInfo() {
             }
         }
     }
-    writefile(2);
+    WriteFile(2);//写入文件
+}
+
+//MARK: -修改管理员密码
+void changeThePassword() {
+    Admin *p;
+    char xPassword[1000];
+    int exist = 0;
+    
+    p = adminHead;
+    printf("请输入旧密码：");
+    while (gets(xPassword)) {
+        while (p != NULL) {
+            if (strcmp(p->password, xPassword) == 0) {
+                exist = 1;
+                break;
+            }
+            p = p->next;
+        }
+        if (exist == 0) {
+            printf("密码输入错误！\n请重新输入：");
+        } else {
+            break;
+        }
+    }
+    
+    if (exist == 1) {
+        printf("请输入新密码：");
+        gets(xPassword);
+        while (strcmp(p->password, xPassword) == 0) {
+            printf("新密码不能与旧密码相同！\n请重新输入：");
+            gets(xPassword);
+        }
+        strcpy(p->password, xPassword);
+        printf("修改密码成功！\n");
+        return;
+    }
+    WriteFile(1);
 }
 
 //MARK: -管理员账户注册
 void adminRegister(){
     Admin *p;
-    char adminName[100];
-    char adminPassword[100];
-    FILE *fp;
+    char adminName[1000];
+    char adminPassword[1000];
 
 //    system("cls");
     if (adminCount == 0) {//第一次添加
         adminHead = (Admin*)malloc(sizeof(Admin));
         printf("管理员姓名: ");
         while (gets(adminName)) {
-            if (strlen(adminName) < 100 && !isExist(adminName, 1)) {
+            if (strlen(adminName) < 1000) {
                 break;
-            } else if (isExist(adminName, 1)) {
-                printf("该用户已存在。\n");
-                printf("管理员姓名：");
             } else {
                 printf("账号名称过长！");
                 printf("管理员姓名:");
@@ -431,7 +424,7 @@ void adminRegister(){
         strcpy(adminHead->adminName, adminName);
         printf("密码: ");
         while (gets(adminPassword)) {
-            if (strlen(adminPassword) < 100) {
+            if (strlen(adminPassword) < 1000) {
                 break;
             } else {
                 printf("密码长度过长！");
@@ -444,11 +437,8 @@ void adminRegister(){
         p = (struct AdminInfo *)malloc(sizeof(struct AdminInfo));
         printf("管理员姓名: ");
         while (gets(adminName)) {
-            if (strlen(adminName) < 100 && isExist(adminName, 1) == 0) {
+            if (strlen(adminName) < 1000) {
                 break;
-            } else if (isExist(adminName, 1) == 1) {
-                printf("该用户已存在。\n");
-                printf("管理员姓名：");
             } else {
                 printf("账号名称过长！");
                 printf("管理员姓名:");
@@ -469,14 +459,8 @@ void adminRegister(){
         adminEnd->next = NULL;
     }
     adminCount++;
-
-    fp = fopen("admin", "w");
-    p = adminHead;
-    while (p != NULL) {
-        fwrite(p, sizeof(struct AdminInfo), 1, fp);
-        p = p->next;
-    }
-    fclose(fp);
+    
+    WriteFile(1);
 
     printf("\n管理员%s创建成功\n", adminEnd->adminName);
 }
@@ -495,6 +479,7 @@ void adminFunction() {
         printf("2.删除书籍信息\n");
         printf("3.修改书籍信息\n");
         printf("4.查询书籍信息\n");
+        printf("5.修改密码\n");
         printf("0.退出\n");
         printf("**************************************************************");
         printf("\n\n\n");
@@ -515,10 +500,8 @@ void adminFunction() {
                 QueryBook();
                 break;
             case 5:
-                ReadBookFile();
+                changeThePassword();
                 break;
-            case 6:
-                ReadAdminFile();
             case 0:
                 end = 1;
                 break;
@@ -534,8 +517,8 @@ void adminFunction() {
 //MARK: -管理员登陆
 void adminLogin() {
     Admin *p;
-    char adminName[100];
-    char adminPassword[100];
+    char adminName[1000];
+    char adminPassword[1000];
 
     p = adminHead;
     printf("\n\n\n");
@@ -568,44 +551,4 @@ void adminLogin() {
     }
 }
 
-//MARK: -修改管理员密码
-void changeThePassword() {
-    Admin *p;
-    char xPassword[100];
-    int exist = 0;
-    
-    p = adminHead;
-    printf("请输入旧密码：");
-    while (gets(xPassword)) {
-        while (p != NULL) {
-            if (strcmp(p->password, xPassword) == 0) {
-                exist = 1;
-                break;
-            }
-            p = p->next;
-        }
-        if (!exist) {
-            printf("密码输入错误！\n请重新输入：");
-        } else {
-            break;
-        }
-    }
-    
-    if (!exist) {
-        return;
-    } else {
-        while (1){
-            printf("请输入新密码：");
-            scanf("%s", xPassword);
-            while (strcmp(p->password, xPassword) == 0) {
-                printf("新密码不能与旧密码相同！\n请重新输入：");
-                scanf("%s", xPassword);
-            }
-            strcpy(p->password, xPassword);
-            printf("修改密码成功！\n");
-            break;
-        }
-    }
-    writefile(2);
-}
 #endif /* BMS4_h */
