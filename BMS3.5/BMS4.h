@@ -20,11 +20,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 //管理员信息
 typedef struct AdminInfo {
     char adminName[100];
-    char scert[100];
+    char password[100];
     struct AdminInfo *next;
 } Admin;
 
@@ -42,7 +43,38 @@ typedef struct BookInfo {
 
 Admin *adminHead = NULL, *adminEnd = NULL;
 Book *bookHead = NULL, *bookEnd = NULL;
-int adminCount, bookCount;
+long int adminCount, bookCount;
+
+//void logtime(char *c,int n) {
+//    int i;
+//    for(i=0;i<n;i++) {
+//        printf("%s",c);
+//        Sleep(s);
+//    }
+//}
+
+int isExist(char *Account, int flag){
+    if (flag == 1) {
+        Admin *p;
+        p = adminHead;
+        while (p != NULL) {
+            if (strcmp(Account, p->adminName) == 0) {
+                return 1;
+            }
+            p = p->next;
+        }
+    } else if (flag == 2) {
+        Book *p;
+        p = bookHead;
+        while (p != NULL) {
+            if (strcmp(Account, p->bookname) == 0) {
+                return 1;
+            }
+            p = p->next;
+        }
+    }
+    return 0;
+}
 
 void writefile(int flag) {
     FILE *fp;
@@ -113,7 +145,7 @@ void TypingInfo() {
     if (bookCount == 0) {
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
-            if (strlen(title) > 30) {
+            if (strlen(title) > 100) {
                 printf("书名过长\n");
                 printf("请重新输入书名：");
                 gets(title);
@@ -130,8 +162,8 @@ void TypingInfo() {
         scanf("%d", &bookHead->year);
         printf("出版月份: ");
         scanf("%d", &bookHead->month);
-        printf("bookday: ");
-        scanf("%d", &bookHead->day);
+//        printf("bookday: ");
+//        scanf("%d", &bookHead->day);
         printf("书籍数量: ");
         scanf("%d", &bookHead->count);
         
@@ -140,8 +172,9 @@ void TypingInfo() {
     } else {
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
-            if (strlen(title) > 10) {
-                printf("too long\n");
+            if (strlen(title) > 100) {
+                printf("书名过长\n请重新输入：");
+                gets(title);
             } else {
                 break;
             }
@@ -172,8 +205,6 @@ void TypingInfo() {
             scanf("%d", &p->year);
             printf("bookmonth: ");
             scanf("%d", &p->month);
-//            printf("bookday: ");
-//            scanf("%d", &p->day);
             printf("bookcount: ");
             scanf("%d", &p->count);
             
@@ -268,7 +299,7 @@ void DeleteBookInfo() {
             break;
         }
     }
-//    deleteuserbook(bookname);
+
     p = bookHead;
     if (strcmp(bookHead->bookname, title) == 0){
         bookHead = bookHead->next;
@@ -341,6 +372,7 @@ void ModifyBookInfo() {
                     printf("输入你修改后的书籍名称: ");
                     scanf("%s", title);
                     strcpy(p->bookname, title);
+                    printf("修改成功！\n");
                     break;
                 case 2:
                     printf("输入你修改后的书籍ID: ");
@@ -358,14 +390,14 @@ void ModifyBookInfo() {
                     scanf("%d", &count);
                     p->count = count;
                     break;
-            case 5:
-                printf("输入你修改后的书籍作者: ");
-                scanf("%s", bookAuthur);
-                strcpy(p->author, bookAuthur);
-                break;
-            case 0:
-                end = 1;
-                break;
+                case 5:
+                    printf("输入你修改后的书籍作者: ");
+                    scanf("%s", bookAuthur);
+                    strcpy(p->author, bookAuthur);
+                    break;
+                case 0:
+                    end = 1;
+                    break;
             }
             if (end == 1){
                 break;
@@ -378,8 +410,8 @@ void ModifyBookInfo() {
 //MARK: -管理员账户注册
 void adminRegister(){
     Admin *p;
-    char adminName[1000];
-    char adminPassword[1000];
+    char adminName[100];
+    char adminPassword[100];
     FILE *fp;
 
 //    system("cls");
@@ -387,44 +419,52 @@ void adminRegister(){
         adminHead = (Admin*)malloc(sizeof(Admin));
         printf("管理员姓名: ");
         while (gets(adminName)) {
-            if (strlen(adminName) < 50) {
+            if (strlen(adminName) < 100 && !isExist(adminName, 1)) {
                 break;
+            } else if (isExist(adminName, 1)) {
+                printf("该用户已存在。\n");
+                printf("管理员姓名：");
             } else {
                 printf("账号名称过长！");
+                printf("管理员姓名:");
             }
         }
         strcpy(adminHead->adminName, adminName);
         printf("密码: ");
         while (gets(adminPassword)) {
-            if (strlen(adminPassword) < 18) {
+            if (strlen(adminPassword) < 100) {
                 break;
             } else {
                 printf("密码长度过长！");
             }
         }
-        strcpy(adminHead->scert, adminPassword);
+        strcpy(adminHead->password, adminPassword);
         adminEnd = adminHead;
         adminEnd->next = NULL;
     } else {
         p = (struct AdminInfo *)malloc(sizeof(struct AdminInfo));
         printf("管理员姓名: ");
         while (gets(adminName)) {
-            if (strlen(adminName) < 50) {
+            if (strlen(adminName) < 100 && !isExist(adminName, 1)) {
                 break;
+            } else if (isExist(adminName, 1)) {
+                printf("该用户已存在。\n");
+                printf("管理员姓名：");
             } else {
                 printf("账号名称过长！");
+                printf("管理员姓名:");
             }
         }
         strcpy(p->adminName, adminName);
         printf("管理员密码: ");
         while (gets(adminPassword)) {
-            if (strlen(adminPassword) < 18) {
+            if (strlen(adminPassword) < 100) {
                 break;
             } else {
                 printf("密码长度过长！");
             }
         }
-        strcpy(p->scert, adminPassword);
+        strcpy(p->password, adminPassword);
         adminEnd->next = p;
         adminEnd = p;
         adminEnd->next = NULL;
@@ -442,7 +482,7 @@ void adminRegister(){
     printf("\n管理员%s创建成功\n", adminEnd->adminName);
 }
 
-//管理员操作菜单
+//MARK: -管理员操作菜单
 void adminFunction() {
     int cmd;
     int end = 0;
@@ -501,7 +541,7 @@ void adminLogin() {
     p = adminHead;
     printf("\n\n\n");
     printf("**************************************************************");
-    printf("\n输入您的管理员信息: \n");
+    printf("\n输入您的管理员信息(输入@取消登陆): \n");
     printf("管理员姓名: ");
     gets(adminName);
     printf("管理员密码: ");
@@ -516,11 +556,12 @@ void adminLogin() {
             gets(adminName);
         }
         
-        while (strcmp(p->scert, adminPassword) != 0) {
+        while (strcmp(p->password, adminPassword) != 0) {
             printf("密码错误!请重新输入\n");
             printf("管理员密码: ");
             gets(adminPassword);
         }
+//        logtime("登录中...", 6000);
         printf("管理员%s登陆成功!将自动跳转至用户界面...", p->adminName);
         adminFunction();
         

@@ -61,6 +61,7 @@ int main() {
     bookEnd = bookHead;
     ReadBookFile();
     
+//    system("color 3f");
     startSystem();
     return 0;
 }
