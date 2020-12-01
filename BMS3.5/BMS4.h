@@ -320,19 +320,18 @@ void ModifyBookInfo() {
     Book *p;
     char title[100], bookAuthur[100];
     int exist = 0, end = 0;
-    int bYear, bMonth, bDay, bID, count;
+    int bYear, bMonth, bID, count;
     
     p = bookHead;
     printf("书籍列表:\n");
-    while (p != NULL)
-    {
+    while (p != NULL) {
         printf("bookname: %10s\n", p->bookname);
         p = p->next;
     }
     
     p = bookHead;
     printf("输入你需要修改的书籍名称(按@退出): ");
-    while (gets(title)){
+    while (gets(title)) {
         if (strcmp(title, "@") == 0) {
             break;
         }
@@ -343,7 +342,7 @@ void ModifyBookInfo() {
             }
             p = p->next;
         }
-        if (!exist){
+        if (!exist) {
             printf("不存在该书籍名称，请重新输入: ");
         } else {
             break;
@@ -381,7 +380,7 @@ void ModifyBookInfo() {
                     break;
                 case 3:
                     printf("输入你修改后的书籍日期: ");
-                    scanf("%d%d%d", &bYear, &bMonth, &bDay);
+                    scanf("%d%d", &bYear, &bMonth);
                     p->year = bYear;
                     p->month = bMonth;
                     break;
@@ -445,9 +444,9 @@ void adminRegister(){
         p = (struct AdminInfo *)malloc(sizeof(struct AdminInfo));
         printf("管理员姓名: ");
         while (gets(adminName)) {
-            if (strlen(adminName) < 100 && !isExist(adminName, 1)) {
+            if (strlen(adminName) < 100 && isExist(adminName, 1) == 0) {
                 break;
-            } else if (isExist(adminName, 1)) {
+            } else if (isExist(adminName, 1) == 1) {
                 printf("该用户已存在。\n");
                 printf("管理员姓名：");
             } else {
@@ -567,5 +566,46 @@ void adminLogin() {
         
         p = p->next;
     }
+}
+
+//MARK: -修改管理员密码
+void changeThePassword() {
+    Admin *p;
+    char xPassword[100];
+    int exist = 0;
+    
+    p = adminHead;
+    printf("请输入旧密码：");
+    while (gets(xPassword)) {
+        while (p != NULL) {
+            if (strcmp(p->password, xPassword) == 0) {
+                exist = 1;
+                break;
+            }
+            p = p->next;
+        }
+        if (!exist) {
+            printf("密码输入错误！\n请重新输入：");
+        } else {
+            break;
+        }
+    }
+    
+    if (!exist) {
+        return;
+    } else {
+        while (1){
+            printf("请输入新密码：");
+            scanf("%s", xPassword);
+            while (strcmp(p->password, xPassword) == 0) {
+                printf("新密码不能与旧密码相同！\n请重新输入：");
+                scanf("%s", xPassword);
+            }
+            strcpy(p->password, xPassword);
+            printf("修改密码成功！\n");
+            break;
+        }
+    }
+    writefile(2);
 }
 #endif /* BMS4_h */
