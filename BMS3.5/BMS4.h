@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 //管理员信息
 typedef struct AdminInfo {
@@ -45,13 +44,14 @@ Book *bookHead = NULL, *bookEnd = NULL;
 long int adminCount, bookCount;
 
 //加载动画函数
-//void logtime(char *c,int n) {
-//    int i;
-//    for(i=0;i<n;i++) {
-//        printf("%s",c);
-//        Sleep(s);
-//    }
-//}
+void logtime(char *c,int n) {
+    int i;
+    for(i=0;i<n;i++) {
+        printf("%s",c);
+//        Sleep(500);
+    }
+    printf("\n");
+}
 
 //MARK: -写入文件
 void WriteFile(int flag) {
@@ -115,10 +115,11 @@ void ReadBookFile(){
 
 //MARK: -从键盘键入书籍信息
 void TypingInfo() {
-    Book *p = NULL;
+    Book *p;
     char title[1000];//从键盘键入的书名
     int isExist = 0;//标签，判断所加入书籍是否存在
     
+//    system("cls");
     if (bookCount == 0) {//当书籍数量为0时
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
@@ -193,7 +194,8 @@ void TypingInfo() {
     
     printf("书籍添加成功\n");
     printf("自动返回管理员界面...\n");
-    //logtime();
+//    system("cls");
+//    logtime('.', 6);
 }
 
 //MARK: -查询图书信息
@@ -313,10 +315,11 @@ void ModifyBookInfo() {
     } else {
         int cmd;
         
+        system("cls");
         printf("\n\n\n");
         printf("**************************************************************\n");
         printf("1.修改书籍名称\n");
-        printf("2.修改书籍id号\n");
+        printf("2.修改书籍图书号\n");
         printf("3.修改书籍日期\n");
         printf("4.修改书籍数量\n");
         printf("5.修改书籍作者\n");
@@ -337,22 +340,26 @@ void ModifyBookInfo() {
                     printf("输入你修改后的书籍ID: ");
                     scanf("%d", &bID);
                     p->id = bID;
+                    printf("修改成功！\n");
                     break;
                 case 3:
                     printf("输入你修改后的书籍日期: ");
                     scanf("%d%d", &bYear, &bMonth);
                     p->year = bYear;
                     p->month = bMonth;
+                    printf("修改成功！\n");
                     break;
                 case 4:
                     printf("输入你修改后的书籍数量: ");
                     scanf("%d", &count);
                     p->count = count;
+                    printf("修改成功！\n");
                     break;
                 case 5:
                     printf("输入你修改后的书籍作者: ");
                     scanf("%s", bookAuthur);
                     strcpy(p->author, bookAuthur);
+                    printf("修改成功！\n");
                     break;
                 case 0:
                     end = 1;
@@ -398,9 +405,9 @@ void changeThePassword() {
         }
         strcpy(p->password, xPassword);
         printf("修改密码成功！\n");
+        WriteFile(1);
         return;
     }
-    WriteFile(1);
 }
 
 //MARK: -管理员账户注册
@@ -543,7 +550,7 @@ void adminLogin() {
             printf("管理员密码: ");
             gets(adminPassword);
         }
-//        logtime("登录中...", 6000);
+//        logtime('.', 6000);
         printf("管理员%s登陆成功!将自动跳转至用户界面...", p->adminName);
         adminFunction();
         

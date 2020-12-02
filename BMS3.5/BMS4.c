@@ -50,13 +50,13 @@ int main() {
     bookHead = (Book*)malloc(sizeof(Book));
     
     fp = fopen("admin", "a+");
-    adminCount = fread(adminHead, sizeof(Admin), 1, fp);
+    adminCount = fread(adminHead, sizeof(Admin), 100, fp);
     fclose(fp);
     adminEnd = adminHead;
     ReadAdminFile();
     
     fp = fopen("book", "a+");
-    bookCount = fread(bookHead, sizeof(Book), 1, fp);
+    bookCount = fread(bookHead, sizeof(Book), 100, fp);
     fclose(fp);
     bookEnd = bookHead;
     ReadBookFile();
