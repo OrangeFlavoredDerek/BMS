@@ -116,41 +116,6 @@ void ReadFile(int tag) {
     }
 }
 
-////MARK: -读取管理员文件
-//void ReadAdminFile(){
-//    Admin *p;
-//    FILE *fp;
-//
-//    p = adminHead;
-//    fp = fopen("admin", "ab+");//打开文件
-//    while (fread(p, sizeof(Admin), 1, fp)){
-//        if (p->next != NULL){
-//            p = (Admin*)malloc(sizeof(Admin));//分配动态内存
-//
-//            adminEnd->next = p;
-//            adminEnd = p;
-//            adminEnd->next = NULL;
-//        }
-//    }
-//}
-//
-//void ReadBookFile(){
-//    Book *p;
-//    FILE *fp;
-//
-//    p = bookHead;
-//    fp = fopen("book", "ab+");//打开文件
-//    while (fread(p, sizeof(Book), 1, fp)){
-//        if (p->next != NULL){
-//            p = (Book*)malloc(sizeof(Book));//分配动态内存
-//
-//            bookEnd->next = p;
-//            bookEnd = p;
-//            bookEnd->next = NULL;
-//        }
-//    }
-//}
-
 //MARK: -错误检查
 void errorChecking(int element, char *charElem, int tag) {
     if (tag == 1) {
@@ -176,6 +141,7 @@ void TypingInfo() {
     if (bookCount == 0) {//当书籍数量为0时
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
+            errorChecking(bookHead->n, title, 2);
             if (strlen(title) > Maxsize) {
                 printf("书名过长\n");
                 printf("请重新输入书名：");
@@ -396,18 +362,22 @@ void ModifyBookInfo() {
                 case 1:
                     printf("输入你修改后的书籍名称: ");
                     scanf("%s", title);
+                    errorChecking(p->n, p->bookname, 2);
                     strcpy(p->bookname, title);
                     printf("修改成功！\n");
                     break;
                 case 2:
                     printf("输入你修改后的书籍ID: ");
                     scanf("%d", &bID);
+                    errorChecking(p->id, p->t, 1);
                     p->id = bID;
                     printf("修改成功！\n");
                     break;
                 case 3:
                     printf("输入你修改后的书籍日期: ");
                     scanf("%d%d", &bYear, &bMonth);
+                    errorChecking(p->year, p->t, 1);
+                    errorChecking(p->month, p->t, 1);
                     p->year = bYear;
                     p->month = bMonth;
                     printf("修改成功！\n");
@@ -415,12 +385,14 @@ void ModifyBookInfo() {
                 case 4:
                     printf("输入你修改后的书籍数量: ");
                     scanf("%d", &count);
+                    errorChecking(p->count, p->t, 1);
                     p->count = count;
                     printf("修改成功！\n");
                     break;
                 case 5:
                     printf("输入你修改后的书籍作者: ");
                     scanf("%s", bookAuthur);
+                    errorChecking(p->n, p->author, 2);
                     strcpy(p->author, bookAuthur);
                     printf("修改成功！\n");
                     break;
@@ -583,7 +555,6 @@ void adminFunction() {
     }
 }
 
-
 //MARK: -管理员登陆
 void adminLogin() {
     Admin *p;
@@ -593,7 +564,7 @@ void adminLogin() {
     p = adminHead;
     printf("\n\n\n");
     printf("**************************************************************");
-    printf("\n输入您的管理员信息(输入@取消登陆): \n");
+    printf("\n输入您的管理员信: \n");
     printf("管理员姓名: ");
     gets(adminName);
     printf("管理员密码: ");

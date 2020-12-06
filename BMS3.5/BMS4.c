@@ -44,6 +44,7 @@ void startSystem() {
 }
 
 
+
 int main() {
     FILE *fp;
     adminHead = (Admin*)malloc(sizeof(Admin));
