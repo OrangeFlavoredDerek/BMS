@@ -21,21 +21,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define Maxsize 3000
+
 //管理员信息
 typedef struct AdminInfo {
-    char adminName[1000];//管理员账号名称
-    char password[1000];//管理员账号密码
+    char adminName[Maxsize];//管理员账号名称
+    char password[Maxsize];//管理员账号密码
     struct AdminInfo *next;
 } Admin;
 
 //书籍信息
 typedef struct BookInfo {
     int id;//书籍号
-    char bookname[1000];//书名
-    char author[1000];//作者
+    char bookname[Maxsize];//书名
+    char author[Maxsize];//作者
     int year;//出版年份
     int month;//出版月份
     int count;//书籍
+    int n;
+    char t[Maxsize];
     struct BookInfo *next;
 } Book;
 
@@ -54,7 +58,7 @@ void logtime(char *c,int n) {
 }
 
 //MARK: -写入文件
-void WriteFile(int flag) {
+void WriteFile(int tag) {
     FILE *fp;
     Admin *adminp;
     Book *bookp;
@@ -62,7 +66,7 @@ void WriteFile(int flag) {
     adminp = adminHead;
     bookp = bookHead;
  
-    if (flag == 1) {
+    if (tag == 1) {
         fp = fopen("admin", "w");//打开管理员文件
         while (adminp != NULL){
             fwrite(adminp, sizeof(Admin), 1, fp);//写入信息
@@ -78,37 +82,86 @@ void WriteFile(int flag) {
     fclose(fp);//关闭文件
 }
 
-//MARK: -读取管理员文件
-void ReadAdminFile(){
-    Admin *p;
+//MARK: -读取文件
+void ReadFile(int tag) {
+    Admin *adminp;
+    Book *bookp;
     FILE *fp;
     
-    p = adminHead;
-    fp = fopen("admin", "ab+");//打开文件
-    while (fread(p, sizeof(Admin), 1, fp)){
-        if (p->next != NULL){
-            p = (Admin*)malloc(sizeof(Admin));//分配动态内存
-            
-            adminEnd->next = p;
-            adminEnd = p;
-            adminEnd->next = NULL;
+    adminp = adminHead;
+    bookp = bookHead;
+    
+    if (tag == 1) {
+        fp = fopen("admin", "ab+");
+        while (fread(adminp, sizeof(Admin), 1, fp)) {
+            if (adminp->next != NULL) {
+                adminp = (Admin*)malloc(sizeof(Admin));
+                
+                adminEnd->next = adminp;
+                adminEnd = adminp;
+                adminEnd->next = NULL;
+            }
+        }
+    } else {
+        fp = fopen("book", "ab+");
+        while (fread(bookp, sizeof(Book), 1, fp)) {
+            if (bookp->next != NULL) {
+                bookp = (Book*)malloc(sizeof(Book));
+                
+                bookEnd->next = bookp;
+                bookEnd = bookp;
+                bookEnd->next = NULL;
+            }
         }
     }
 }
 
-void ReadBookFile(){
-    Book *p;
-    FILE *fp;
-    
-    p = bookHead;
-    fp = fopen("book", "ab+");//打开文件
-    while (fread(p, sizeof(Book), 1, fp)){
-        if (p->next != NULL){
-            p = (Book*)malloc(sizeof(Book));//分配动态内存
-            
-            bookEnd->next = p;
-            bookEnd = p;
-            bookEnd->next = NULL;
+////MARK: -读取管理员文件
+//void ReadAdminFile(){
+//    Admin *p;
+//    FILE *fp;
+//
+//    p = adminHead;
+//    fp = fopen("admin", "ab+");//打开文件
+//    while (fread(p, sizeof(Admin), 1, fp)){
+//        if (p->next != NULL){
+//            p = (Admin*)malloc(sizeof(Admin));//分配动态内存
+//
+//            adminEnd->next = p;
+//            adminEnd = p;
+//            adminEnd->next = NULL;
+//        }
+//    }
+//}
+//
+//void ReadBookFile(){
+//    Book *p;
+//    FILE *fp;
+//
+//    p = bookHead;
+//    fp = fopen("book", "ab+");//打开文件
+//    while (fread(p, sizeof(Book), 1, fp)){
+//        if (p->next != NULL){
+//            p = (Book*)malloc(sizeof(Book));//分配动态内存
+//
+//            bookEnd->next = p;
+//            bookEnd = p;
+//            bookEnd->next = NULL;
+//        }
+//    }
+//}
+
+//MARK: -错误检查
+void errorChecking(int element, char *charElem, int tag) {
+    if (tag == 1) {
+        while (element <= 0) {
+            printf("输入格式错误\n请重新输入：");
+            scanf("%d", &element);
+        }
+    } else {
+        while (strcmp(charElem, "") == 0) {
+            printf("输入格式错误\n请重新输入：");
+            scanf("%s", charElem);
         }
     }
 }
@@ -116,14 +169,14 @@ void ReadBookFile(){
 //MARK: -从键盘键入书籍信息
 void TypingInfo() {
     Book *p;
-    char title[1000];//从键盘键入的书名
+    char title[Maxsize];//从键盘键入的书名
     int isExist = 0;//标签，判断所加入书籍是否存在
     
 //    system("cls");
     if (bookCount == 0) {//当书籍数量为0时
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
-            if (strlen(title) > 1000) {
+            if (strlen(title) > Maxsize) {
                 printf("书名过长\n");
                 printf("请重新输入书名：");
             } else {
@@ -131,23 +184,28 @@ void TypingInfo() {
             }
         }
         strcpy(bookHead->bookname, title);//strcpy()字符串复制函数
-        printf("书号: ");
+        printf("书籍号: ");
         scanf("%d", &bookHead->id);
+        errorChecking(bookHead->id, bookHead->t, 1);
         printf("作者: ");
         scanf("%s", bookHead->author);
+        errorChecking(bookHead->n, bookHead->author, 2);
         printf("出版年份: ");
         scanf("%d", &bookHead->year);
+        errorChecking(bookHead->year, bookHead->t, 1);
         printf("出版月份: ");
         scanf("%d", &bookHead->month);
+        errorChecking(bookHead->month, bookHead->t, 1);
         printf("书籍数量: ");
         scanf("%d", &bookHead->count);
+        errorChecking(bookHead->count, bookHead->t, 1);
         
         bookEnd = bookHead;
         bookEnd->next = NULL;
     } else {//数据库中已经存在书籍时
         printf("输入新增书籍的书名: ");
         while (gets(title)) {
-            if (strlen(title) > 1000) {
+            if (strlen(title) > Maxsize) {
                 printf("书名过长\n请重新输入：");
             } else {
                 break;
@@ -172,16 +230,21 @@ void TypingInfo() {
             p = (Book*)malloc(sizeof(Book));//分配动态内存
             
             strcpy(p->bookname, title);
-            printf("id: ");
+            printf("书号: ");
             scanf("%d", &p->id);
-            printf("author: ");
+            errorChecking(bookHead->id, bookHead->t, 1);
+            printf("作者: ");
             scanf("%s", p->author);
-            printf("bookyear: ");
+            errorChecking(bookHead->n, bookHead->author, 2);
+            printf("出版年份: ");
             scanf("%d", &p->year);
-            printf("bookmonth: ");
+            errorChecking(bookHead->year, bookHead->t, 1);
+            printf("出版月份: ");
             scanf("%d", &p->month);
-            printf("bookcount: ");
+            errorChecking(bookHead->month, bookHead->t, 1);
+            printf("书籍数量: ");
             scanf("%d", &p->count);
+            errorChecking(bookHead->count, bookHead->t, 1);
             
             bookEnd->next = p;
             bookEnd = p;
@@ -280,7 +343,7 @@ void DeleteBookInfo() {
 //MARK: -修改图书信息
 void ModifyBookInfo() {
     Book *p;
-    char title[1000], bookAuthur[1000];
+    char title[Maxsize], bookAuthur[Maxsize];
     int exist = 0, end = 0;
     int bYear, bMonth, bID, count;
     
@@ -376,7 +439,7 @@ void ModifyBookInfo() {
 //MARK: -修改管理员密码
 void changeThePassword() {
     Admin *p;
-    char xPassword[1000];
+    char xPassword[Maxsize];
     int exist = 0;
     
     p = adminHead;
@@ -406,22 +469,22 @@ void changeThePassword() {
         strcpy(p->password, xPassword);
         printf("修改密码成功！\n");
         WriteFile(1);
-        return;
+//        return;
     }
 }
 
 //MARK: -管理员账户注册
 void adminRegister(){
     Admin *p;
-    char adminName[1000];
-    char adminPassword[1000];
+    char adminName[Maxsize];
+    char adminPassword[Maxsize];
 
 //    system("cls");
     if (adminCount == 0) {//第一次添加
         adminHead = (Admin*)malloc(sizeof(Admin));
         printf("管理员姓名: ");
         while (gets(adminName)) {
-            if (strlen(adminName) < 1000) {
+            if (strlen(adminName) < Maxsize) {
                 break;
             } else {
                 printf("账号名称过长！");
@@ -431,7 +494,7 @@ void adminRegister(){
         strcpy(adminHead->adminName, adminName);
         printf("密码: ");
         while (gets(adminPassword)) {
-            if (strlen(adminPassword) < 1000) {
+            if (strlen(adminPassword) < Maxsize) {
                 break;
             } else {
                 printf("密码长度过长！");
@@ -444,7 +507,7 @@ void adminRegister(){
         p = (struct AdminInfo *)malloc(sizeof(struct AdminInfo));
         printf("管理员姓名: ");
         while (gets(adminName)) {
-            if (strlen(adminName) < 1000) {
+            if (strlen(adminName) < Maxsize) {
                 break;
             } else {
                 printf("账号名称过长！");
@@ -454,7 +517,7 @@ void adminRegister(){
         strcpy(p->adminName, adminName);
         printf("管理员密码: ");
         while (gets(adminPassword)) {
-            if (strlen(adminPassword) < 100) {
+            if (strlen(adminPassword) < Maxsize) {
                 break;
             } else {
                 printf("密码长度过长！");
@@ -524,8 +587,8 @@ void adminFunction() {
 //MARK: -管理员登陆
 void adminLogin() {
     Admin *p;
-    char adminName[1000];
-    char adminPassword[1000];
+    char adminName[Maxsize];
+    char adminPassword[Maxsize];
 
     p = adminHead;
     printf("\n\n\n");

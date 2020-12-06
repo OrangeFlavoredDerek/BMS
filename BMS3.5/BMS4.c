@@ -53,13 +53,13 @@ int main() {
     adminCount = fread(adminHead, sizeof(Admin), 100, fp);
     fclose(fp);
     adminEnd = adminHead;
-    ReadAdminFile();
+    ReadFile(1);
     
     fp = fopen("book", "a+");
     bookCount = fread(bookHead, sizeof(Book), 100, fp);
     fclose(fp);
     bookEnd = bookHead;
-    ReadBookFile();
+    ReadFile(2);
     
 //    system("color 3f");
     startSystem();
