@@ -23,6 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD1E5F092581B271009A0A47 /* book.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = book.txt; sourceTree = "<group>"; };
+		AD1E5F0A2581B271009A0A47 /* admin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = admin.txt; sourceTree = "<group>"; };
 		AD35F1BB256C891F001B5302 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		AD35F1D6256D5819001B5302 /* BMS4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMS4.h; sourceTree = "<group>"; };
 		AD35F1D7256D5819001B5302 /* BMS4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BMS4.c; sourceTree = "<group>"; };
@@ -62,6 +64,8 @@
 				AD35F1BB256C891F001B5302 /* README.md */,
 				AD35F1D6256D5819001B5302 /* BMS4.h */,
 				AD35F1D7256D5819001B5302 /* BMS4.c */,
+				AD1E5F0A2581B271009A0A47 /* admin.txt */,
+				AD1E5F092581B271009A0A47 /* book.txt */,
 			);
 			path = BMS3.5;
 			sourceTree = "<group>";

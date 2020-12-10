@@ -5,10 +5,10 @@
 //  Created by Derek Chan on 2020/11/24.
 //
 
-#include "BMS4.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "BMS4.h"
 
 //MARK: -开始界面
 void startSystem() {
@@ -46,19 +46,19 @@ void startSystem() {
 
 
 int main() {
-    FILE *fp;
+//    FILE *fp;
     adminHead = (Admin*)malloc(sizeof(Admin));
     bookHead = (Book*)malloc(sizeof(Book));
     
-    fp = fopen("admin", "a+");
-    adminCount = fread(adminHead, sizeof(Admin), 100, fp);
-    fclose(fp);
+//    fp = fopen("admin.txt", "a+");
+    adminCount = 0;
+//    fclose(fp);
     adminEnd = adminHead;
     ReadFile(1);
     
-    fp = fopen("book", "a+");
-    bookCount = fread(bookHead, sizeof(Book), 100, fp);
-    fclose(fp);
+//    fp = fopen("book", "a+");
+    bookCount = 0;
+//    fclose(fp);
     bookEnd = bookHead;
     ReadFile(2);
     
