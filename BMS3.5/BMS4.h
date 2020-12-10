@@ -58,47 +58,6 @@ void logtime(char *c,int n) {
 }
 
 //MARK: -写入文件
-void WriteFile(int tag) {
-    FILE *fp;
-    Admin *adminp;
-    Book *bookp;
-    
-    adminp = adminHead;
-    bookp = bookHead;
-    
-    if (tag == 1) {
-        fp = fopen("admin.txt", "w");
-        if (!fp) {
-            printf("文件打开失败。");
-            exit(0);
-        }
-        while (adminp) {
-            fputs(adminp->adminName, fp);
-            fputs(adminp->password, fp);
-            
-            adminp = adminp->next;
-        }
-        fclose(fp);
-    } else {
-        fp = fopen("book.txt", "w");
-        if (!fp) {
-            printf("文件打开失败。");
-            exit(0);
-        }
-        while (bookp) {
-            fputc(bookp->id, fp);
-            fputs(bookp->bookname, fp);
-            fputs(bookp->author, fp);
-            fputc(bookp->year, fp);
-            fputc(bookp->month, fp);
-            fputc(bookp->count, fp);
-            
-            bookp = bookp->next;
-        }
-    }
-    fclose(fp);
-}
-
 //void WriteFile(int tag) {
 //    FILE *fp;
 //    Admin *adminp;
@@ -108,105 +67,146 @@ void WriteFile(int tag) {
 //    bookp = bookHead;
 //
 //    if (tag == 1) {
-//        fp = fopen("admin.txt", "w");//打开管理员文件
-//        while (adminp != NULL){
-//            fwrite(adminp, sizeof(Admin), 1, fp);//写入信息
+//        fp = fopen("admin.txt", "w");
+//        if (!fp) {
+//            printf("文件打开失败。");
+//            exit(0);
+//        }
+//        while (adminp) {
+//            fputs(adminp->adminName, fp);
+//            fputs(adminp->password, fp);
+//
 //            adminp = adminp->next;
 //        }
+//        fclose(fp);
 //    } else {
-//        fp = fopen("book.txt", "w");//打开书籍文件
-//        while (bookp != NULL) {
-//            fwrite(bookp, sizeof(Book), 1, fp);//写入书籍信息
+//        fp = fopen("book.txt", "w");
+//        if (!fp) {
+//            printf("文件打开失败。");
+//            exit(0);
+//        }
+//        while (bookp) {
+//            fputc(bookp->id, fp);
+//            fputs(bookp->bookname, fp);
+//            fputs(bookp->author, fp);
+//            fputc(bookp->year, fp);
+//            fputc(bookp->month, fp);
+//            fputc(bookp->count, fp);
+//
 //            bookp = bookp->next;
 //        }
 //    }
-//    fclose(fp);//关闭文件
+//    fclose(fp);
 //}
 
-//MARK: -读取文件
-void ReadFile(int tag) {
+void WriteFile(int tag) {
+    FILE *fp;
     Admin *adminp;
     Book *bookp;
-    FILE *fp = NULL;
-    
+
+    adminp = adminHead;
+    bookp = bookHead;
+
     if (tag == 1) {
-        fp = fopen("/Users/derekchan/Desktop/BMS3.5/BMS3.5/admin.txt ", "r");
-        if (!fp) {
-            printf("文件打开失败。");
-            exit(0);
+        fp = fopen("admin", "w");//打开管理员文件
+        while (adminp != NULL){
+            fwrite(adminp, sizeof(Admin), 1, fp);//写入信息
+            adminp = adminp->next;
         }
-        adminEnd = adminHead;
-        while (!feof(fp)) {
-            char w;
-            adminp = (Admin*)malloc(sizeof(Admin));
-            fscanf(fp, "%s", adminp->adminName);
-            fscanf(fp, "%c", &w);
-            fscanf(fp, "%s", adminp->password);
-            fscanf(fp, "%c", &w);
-            
-            adminEnd->next = adminp;
-            adminEnd = adminp;
-        }
-        adminEnd->next = NULL;
-        fclose(fp);
     } else {
-        fp = fopen("/Users/derekchan/Desktop/BMS3.5/BMS3.5/book.txt", "r");
-        if (!fp) {
-            printf("文件打开失败。");
-            exit(0);
+        fp = fopen("book", "w");//打开书籍文件
+        while (bookp != NULL) {
+            fwrite(bookp, sizeof(Book), 1, fp);//写入书籍信息
+            bookp = bookp->next;
         }
-        bookEnd = bookHead;
-        while (!feof(fp)) {
-            char w;
-            bookp = (Book*)malloc(sizeof(Book));
-            fscanf(fp, "%d", &bookp->id);
-            fscanf(fp, "%s", bookp->bookname);
-            fscanf(fp, "%s", bookp->author);
-            fscanf(fp, "%d", &bookp->year);
-            fscanf(fp, "%d", &bookp->month);
-            fscanf(fp, "%c", &w);
-            fscanf(fp, "%d", &bookp->count);
-            fscanf(fp, "%c", &w);
-            bookEnd->next = bookp;
-            bookEnd = bookp;
-        }
-        bookEnd->next = NULL;
-        fclose(fp);
     }
+    fclose(fp);//关闭文件
 }
 
+//MARK: -读取文件
 //void ReadFile(int tag) {
 //    Admin *adminp;
 //    Book *bookp;
-//    FILE *fp;
-//
-//    adminp = adminHead;
-//    bookp = bookHead;
+//    FILE *fp = NULL;
 //
 //    if (tag == 1) {
-//        fp = fopen("admin", "ab+");
-//        while (fread(adminp, sizeof(Admin), 1, fp)) {
-//            if (adminp->next != NULL) {
-//                adminp = (Admin*)malloc(sizeof(Admin));
-//
-//                adminEnd->next = adminp;
-//                adminEnd = adminp;
-//                adminEnd->next = NULL;
-//            }
+//        fp = fopen("/Users/derekchan/Desktop/BMS3.5/BMS3.5/admin.txt ", "r");
+//        if (!fp) {
+//            printf("文件打开失败。");
+//            exit(0);
 //        }
+//        adminEnd = adminHead;
+//        while (!feof(fp)) {
+//            char w;
+//            adminp = (Admin*)malloc(sizeof(Admin));
+//            fscanf(fp, "%s", adminp->adminName);
+//            fscanf(fp, "%c", &w);
+//            fscanf(fp, "%s", adminp->password);
+//            fscanf(fp, "%c", &w);
+//
+//            adminEnd->next = adminp;
+//            adminEnd = adminp;
+//        }
+//        adminEnd->next = NULL;
+//        fclose(fp);
 //    } else {
-//        fp = fopen("book", "ab+");
-//        while (fread(bookp, sizeof(Book), 1, fp)) {
-//            if (bookp->next != NULL) {
-//                bookp = (Book*)malloc(sizeof(Book));
-//
-//                bookEnd->next = bookp;
-//                bookEnd = bookp;
-//                bookEnd->next = NULL;
-//            }
+//        fp = fopen("/Users/derekchan/Desktop/BMS3.5/BMS3.5/book.txt", "r");
+//        if (!fp) {
+//            printf("文件打开失败。");
+//            exit(0);
 //        }
+//        bookEnd = bookHead;
+//        while (!feof(fp)) {
+//            char w;
+//            bookp = (Book*)malloc(sizeof(Book));
+//            fscanf(fp, "%d", &bookp->id);
+//            fscanf(fp, "%s", bookp->bookname);
+//            fscanf(fp, "%s", bookp->author);
+//            fscanf(fp, "%d", &bookp->year);
+//            fscanf(fp, "%d", &bookp->month);
+//            fscanf(fp, "%c", &w);
+//            fscanf(fp, "%d", &bookp->count);
+//            fscanf(fp, "%c", &w);
+//            bookEnd->next = bookp;
+//            bookEnd = bookp;
+//        }
+//        bookEnd->next = NULL;
+//        fclose(fp);
 //    }
 //}
+
+void ReadFile(int tag) {
+    Admin *adminp;
+    Book *bookp;
+    FILE *fp;
+
+    adminp = adminHead;
+    bookp = bookHead;
+
+    if (tag == 1) {
+        fp = fopen("admin", "ab+");
+        while (fread(adminp, sizeof(Admin), 1, fp)) {
+            if (adminp->next != NULL) {
+                adminp = (Admin*)malloc(sizeof(Admin));
+
+                adminEnd->next = adminp;
+                adminEnd = adminp;
+                adminEnd->next = NULL;
+            }
+        }
+    } else {
+        fp = fopen("book", "ab+");
+        while (fread(bookp, sizeof(Book), 1, fp)) {
+            if (bookp->next != NULL) {
+                bookp = (Book*)malloc(sizeof(Book));
+
+                bookEnd->next = bookp;
+                bookEnd = bookp;
+                bookEnd->next = NULL;
+            }
+        }
+    }
+}
 
 //MARK: -错误检查
 void errorChecking(int element, char *charElem, int tag) {
@@ -334,8 +334,7 @@ void QueryBook() {
     while (p != NULL) {
         if (p->id == xID) {
             printf("**************************************************************");
-            printf("书籍名称: ");
-            puts(p->bookname);
+            printf("书籍名称: %s\n", p->bookname);
             printf("书号: %d\n", p->id);
             printf("作者: %s\n", p->author);
             printf("出版时间: %d/%d\n", p->year, p->month);
