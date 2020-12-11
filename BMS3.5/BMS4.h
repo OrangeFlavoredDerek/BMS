@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include <Windows.h>
 
 #define Maxsize 3000
 
@@ -37,7 +38,6 @@ typedef struct BookInfo {
     char author[Maxsize];//作者
     int year;//出版年份
     int month;//出版月份
-//    int count;//书籍
     int n;
     char t[Maxsize];
     struct BookInfo *next;
@@ -45,7 +45,6 @@ typedef struct BookInfo {
 
 Admin *adminHead = NULL, *adminEnd = NULL;
 Book *bookHead = NULL, *bookEnd = NULL;
-//int adminCount, bookCount;
 
 //加载动画函数
 void logtime(char c, int n) {
@@ -90,8 +89,6 @@ void WriteFile(int tag) {
             fputc(bookp->year, fp);
             fputs("", fp);
             fputc(bookp->month, fp);
-//            fputs("", fp);
-//            fputc(bookp->count, fp);
             if (bookp->next) {
                 fputs("\n", fp);
             }
@@ -219,21 +216,16 @@ void errorChecking(int element, char *charElem, int tag) {
 
 //MARK: -从键盘键入书籍信息
 void TypingInfo() {
-//    Book *p;
     char title[Maxsize];//从键盘键入的书名
     int isExist = 0;//标签，判断所加入书籍是否存在
     
 //    system("cls");
     printf("输入新增书籍的书名: ");
     while (gets(title)) {
-        if (strlen(title) > Maxsize) {
-            printf("书名过长\n");
-            printf("请重新输入书名：");
-        } else if (bookHead != NULL) {
-            if (strcmp(title, bookHead->bookname) == 0) {
-                isExist = 1;
-                break;
-            }
+        if (strcmp(title, bookHead->bookname) == 0) {
+            isExist = 1;
+            printf("该书籍已存在，请勿重复添加！\n");
+            return;
         } else {
             break;
         }
@@ -268,7 +260,7 @@ void QueryBook() {
     int exist = 0, xID = 0, n;
     
     printf("\n\n\n");
-    printf("\n请输入书名号查询：\n ");
+    printf("请输入书名号查询\n");
     printf("请输入所要查找书号：");
     scanf("%d", &xID);
     printf("\n\n\n");
@@ -277,11 +269,10 @@ void QueryBook() {
     while (p != NULL) {
         if (p->id == xID) {
             printf("**************************************************************");
-            printf("书籍名称: %s\n", p->bookname);
+            printf("\n书籍名称: %s\n", p->bookname);
             printf("书号: %d\n", p->id);
             printf("作者: %s\n", p->author);
-            printf("出版时间: %d/%d\n", p->year, p->month);
-//            printf("书籍数量: %d\n", p->count);
+            printf("出版时间: %d年%d月\n", p->year, p->month);
             printf("**************************************************************\n");
             exist = 1;//1表示已找到书籍
             break;
@@ -294,9 +285,10 @@ void QueryBook() {
     printf("输入0返回管理员界面: ");
     
     while (1) {
+        fflush(stdin);
         scanf("%d", &n);
         if (n == 0)
-            break;
+          break;
     }
 }
 
@@ -342,35 +334,34 @@ void DeleteBookInfo() {
 
 //MARK: -修改图书信息
 void ModifyBookInfo() {
-    Book *p;
+    Book *p = NULL, *q = NULL;
     char title[Maxsize], bookAuthur[Maxsize];
     int exist = 0, end = 0;
     int bYear, bMonth, bID;
     
-    p = bookHead;
+    q = bookHead;
     printf("书籍列表:\n");
-    while (p != NULL) {
-        printf("%10s\n", p->bookname);//现实数据库内所有存储书籍
-        p = p->next;
+    while (q != NULL) {
+        printf("%10s\t", q->bookname);//现实数据库内所有存储书籍
+        printf("%d\n", q->id);
+        q = q->next;
     }
     
     p = bookHead;
-    printf("输入你需要修改的书籍名称(按@退出): ");
-    while (gets(title)) {
-        if (strcmp(title, "@") == 0) {//当从键盘键入@时结束
+    printf("输入你需要修改的书籍号(按0退出): ");
+    while (scanf("%d", &bID)) {
+        if (bID == 0) {//当从键盘键入@时结束
             break;
         }
-        while (p != NULL){
-            if (strcmp(p->bookname, title) == 0){
+        while (p){
+            if (p->id == bID){
                 exist = 1;//要修改的书籍在数据库中存在
                 break;
             }
             p = p->next;
         }
-        if (!exist) {
+        if (exist != 1) {
             printf("不存在该书籍名称，请重新输入: ");
-        } else {
-            break;
         }
     }
     if (!exist) {
@@ -384,8 +375,7 @@ void ModifyBookInfo() {
         printf("1.修改书籍名称\n");
         printf("2.修改书籍图书号\n");
         printf("3.修改书籍日期\n");
-        printf("4.修改书籍数量\n");
-        printf("5.修改书籍作者\n");
+        printf("4.修改书籍作者\n");
         printf("0.退出\n");
         printf("**************************************************************");
         printf("\n\n\n");
@@ -417,13 +407,6 @@ void ModifyBookInfo() {
                     printf("修改成功！\n");
                     break;
                 case 4:
-//                    printf("输入你修改后的书籍数量: ");
-//                    scanf("%d", &count);
-//                    errorChecking(p->count, p->t, 1);
-//                    p->count = count;
-//                    printf("修改成功！\n");
-                    break;
-                case 5:
                     printf("输入你修改后的书籍作者: ");
                     scanf("%s", bookAuthur);
                     errorChecking(p->n, p->author, 2);
@@ -486,7 +469,7 @@ void adminRegister(){
     char adminPassword[Maxsize];
 
 //    system("cls");
-    adminHead = (Admin*)malloc(sizeof(Admin));
+//    adminHead = (Admin*)malloc(sizeof(Admin));
     printf("管理员姓名: ");
     while (gets(adminName)) {
         if (strlen(adminName) < Maxsize) {

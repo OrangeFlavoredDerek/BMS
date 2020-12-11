@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+//#include <Windows.h>
 #include "BMS4.h"
 
 //MARK: -开始界面
@@ -46,19 +47,12 @@ void startSystem() {
 
 
 int main() {
-//    FILE *fp;
     adminHead = (Admin*)malloc(sizeof(Admin));
     bookHead = (Book*)malloc(sizeof(Book));
     
-//    fp = fopen("admin.txt", "a+");
-//    adminCount = fread(adminHead, sizeof(Admin), 100, fp);
-//    fclose(fp);
     adminEnd = adminHead;
     ReadFile(1);
     
-//    fp = fopen("book.txt", "a+");
-//    bookCount = fread(bookHead, sizeof(Book), 100, fp);
-//    fclose(fp);
     bookEnd = bookHead;
     ReadFile(2);
     
