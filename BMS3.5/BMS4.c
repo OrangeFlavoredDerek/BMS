@@ -47,20 +47,13 @@ void startSystem() {
 
 
 int main() {
-    FILE *fp;
     adminHead = (Admin*)malloc(sizeof(Admin));
     bookHead = (Book*)malloc(sizeof(Book));
     system("color 3f");
 
-    fp = fopen("admin.txt", "a+");
-    adminCount = fread(adminHead, sizeof(Admin), 100, fp);
-    fclose(fp);
     adminEnd = adminHead;
     readFile(1);
 
-    fp = fopen("book.txt", "a+");
-    bookCount = fread(bookHead, sizeof(Book), 100, fp);
-    fclose(fp);
     bookEnd = bookHead;
     readFile(2);
 

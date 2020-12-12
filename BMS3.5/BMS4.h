@@ -40,7 +40,6 @@ typedef struct BookInfo {
     char author[Maxsize];//作者
     int year;//出版年份
     int month;//出版月份
-//    int count;//书籍
     int n;
     char t[Maxsize];
     struct BookInfo *next;
@@ -48,7 +47,6 @@ typedef struct BookInfo {
 
 Admin *adminHead = NULL, *adminEnd = NULL;
 Book *bookHead = NULL, *bookEnd = NULL;
-long int adminCount, bookCount;
 
 //加载动画函数
 void logtime(char c, int n) {
@@ -136,7 +134,7 @@ void errorChecking(int element, char *charElem, int tag) {
 
 //MARK: -从键盘键入书籍信息
 void TypingInfo() {
-    Book *p = NULL;
+    Book *p = NULL, *q = NULL;
     char title[Maxsize];//从键盘键入的书名
     
     p = bookHead;
@@ -153,21 +151,25 @@ void TypingInfo() {
             p = p->next;
         }
     }
-    strcpy(bookHead->bookname, title);//strcpy()字符串复制函数
+    
+    q = bookHead;
+    q = (Book*)malloc(sizeof(Book));
+    strcpy(q->bookname, title);//strcpy()字符串复制函数
     printf("书籍号: ");
-    scanf("%d", &bookHead->id);
-    errorChecking(bookHead->id, bookHead->t, 1);
+    scanf("%d", &q->id);
+    errorChecking(q->id, q->t, 1);
     printf("作者: ");
-    scanf("%s", bookHead->author);
-    errorChecking(bookHead->n, bookHead->author, 2);
+    scanf("%s", q->author);
+    errorChecking(q->n, q->author, 2);
     printf("出版年份: ");
-    scanf("%d", &bookHead->year);
-    errorChecking(bookHead->year, bookHead->t, 1);
+    scanf("%d", &q->year);
+    errorChecking(q->year, q->t, 1);
     printf("出版月份: ");
-    scanf("%d", &bookHead->month);
-    errorChecking(bookHead->month, bookHead->t, 1);
+    scanf("%d", &q->month);
+    errorChecking(q->month, q->t, 1);
 
-    bookEnd = bookHead;
+    bookEnd->next = q;
+    bookEnd = q;
     bookEnd->next = NULL;
     
     writeFile(2);
@@ -267,7 +269,7 @@ void ModifyBookInfo() {
     p = bookHead;
     printf("书籍列表:\n");
     while (p != NULL) {
-        printf("%s\n", p->bookname);//现实数据库内所有存储书籍
+        printf("%s %d\n", p->bookname, p->id);//现实数据库内所有存储书籍
         p = p->next;
     }
 
