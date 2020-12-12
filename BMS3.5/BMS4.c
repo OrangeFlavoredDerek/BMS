@@ -4,10 +4,9 @@
 //
 //  Created by Derek Chan on 2020/11/24.
 //
-
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 //#include <Windows.h>
 #include "BMS4.h"
 
@@ -15,6 +14,7 @@
 void startSystem() {
     int cmd, end = 0;
     while (1) {
+        system("cls");
         printf("\n\n\n");
         printf("**************************************************************");
         printf("\n图书馆管理系统\n");
@@ -47,16 +47,23 @@ void startSystem() {
 
 
 int main() {
+    FILE *fp;
     adminHead = (Admin*)malloc(sizeof(Admin));
     bookHead = (Book*)malloc(sizeof(Book));
-    
-    adminEnd = adminHead;
-    ReadFile(1);
-    
-    bookEnd = bookHead;
-    ReadFile(2);
-    
     system("color 3f");
+
+    fp = fopen("admin.txt", "a+");
+    adminCount = fread(adminHead, sizeof(Admin), 100, fp);
+    fclose(fp);
+    adminEnd = adminHead;
+    readFile(1);
+
+    fp = fopen("book.txt", "a+");
+    bookCount = fread(bookHead, sizeof(Book), 100, fp);
+    fclose(fp);
+    bookEnd = bookHead;
+    readFile(2);
+
     startSystem();
     return 0;
 }
