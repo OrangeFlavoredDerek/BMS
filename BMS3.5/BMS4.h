@@ -24,6 +24,8 @@
 
 #define Maxsize 3000
 
+void adminFunction(void);
+
 //管理员信息
 typedef struct AdminInfo {
     char adminName[Maxsize];//管理员账号名称
@@ -38,7 +40,7 @@ typedef struct BookInfo {
     char author[Maxsize];//作者
     int year;//出版年份
     int month;//出版月份
-    int count;//书籍
+//    int count;//书籍
     int n;
     char t[Maxsize];
     struct BookInfo *next;
@@ -134,92 +136,40 @@ void errorChecking(int element, char *charElem, int tag) {
 
 //MARK: -从键盘键入书籍信息
 void TypingInfo() {
-    Book *p;
+    Book *p = NULL;
     char title[Maxsize];//从键盘键入的书名
-    int isExist = 0;//标签，判断所加入书籍是否存在
-
+    
+    p = bookHead;
     system("cls");
-    if (bookCount == 0) {//当书籍数量为0时
-        printf("输入新增书籍的书名: ");
-        while (gets(title)) {
-            errorChecking(bookHead->n, title, 2);
-            if (strlen(title) > Maxsize) {
-                printf("书名过长\n");
-                printf("请重新输入书名：");
+    printf("输入新增书籍的书名: ");
+    while (gets(title)) {
+        if (p) {
+            if (strcmp(p->bookname, title) == 0) {
+                printf("该书籍已存在");
+                adminFunction();
             } else {
-                break;
-            }
-        }
-        strcpy(bookHead->bookname, title);//strcpy()字符串复制函数
-        printf("书籍号: ");
-        scanf("%d", &bookHead->id);
-        errorChecking(bookHead->id, bookHead->t, 1);
-        printf("作者: ");
-        scanf("%s", bookHead->author);
-        errorChecking(bookHead->n, bookHead->author, 2);
-        printf("出版年份: ");
-        scanf("%d", &bookHead->year);
-        errorChecking(bookHead->year, bookHead->t, 1);
-        printf("出版月份: ");
-        scanf("%d", &bookHead->month);
-        errorChecking(bookHead->month, bookHead->t, 1);
-        printf("书籍数量: ");
-        scanf("%d", &bookHead->count);
-        errorChecking(bookHead->count, bookHead->t, 1);
-
-        bookEnd = bookHead;
-        bookEnd->next = NULL;
-    } else {//数据库中已经存在书籍时
-        printf("输入新增书籍的书名: ");
-        while (gets(title)) {
-            if (strlen(title) > Maxsize) {
-                printf("书名过长\n请重新输入：");
-            } else {
-                break;
-            }
-        }
-        p = bookHead;
-
-        while (p != NULL) {
-            if (strcmp(title, p->bookname) == 0) {//strcmp()字符串比较函数，当两字符串相同时返回0
-                isExist = 1;//书籍已存在
                 break;
             }
             p = p->next;
         }
-        if (isExist == 1) {//当所添加书籍已经存在时
-            int count;
-
-            printf("输入新添书籍的数量: ");
-            scanf("%d", &count);
-            p->count += count;//仅添加改书籍数量
-        } else {//若未存在
-            p = (Book*)malloc(sizeof(Book));//分配动态内存
-
-            strcpy(p->bookname, title);
-            printf("书号: ");
-            scanf("%d", &p->id);
-            errorChecking(bookHead->id, bookHead->t, 1);
-            printf("作者: ");
-            scanf("%s", p->author);
-            errorChecking(bookHead->n, bookHead->author, 2);
-            printf("出版年份: ");
-            scanf("%d", &p->year);
-            errorChecking(bookHead->year, bookHead->t, 1);
-            printf("出版月份: ");
-            scanf("%d", &p->month);
-            errorChecking(bookHead->month, bookHead->t, 1);
-            printf("书籍数量: ");
-            scanf("%d", &p->count);
-            errorChecking(bookHead->count, bookHead->t, 1);
-
-            bookEnd->next = p;
-            bookEnd = p;
-            bookEnd->next = NULL;
-        }
     }
-    bookCount++;
+    strcpy(bookHead->bookname, title);//strcpy()字符串复制函数
+    printf("书籍号: ");
+    scanf("%d", &bookHead->id);
+    errorChecking(bookHead->id, bookHead->t, 1);
+    printf("作者: ");
+    scanf("%s", bookHead->author);
+    errorChecking(bookHead->n, bookHead->author, 2);
+    printf("出版年份: ");
+    scanf("%d", &bookHead->year);
+    errorChecking(bookHead->year, bookHead->t, 1);
+    printf("出版月份: ");
+    scanf("%d", &bookHead->month);
+    errorChecking(bookHead->month, bookHead->t, 1);
 
+    bookEnd = bookHead;
+    bookEnd->next = NULL;
+    
     writeFile(2);
 
     printf("书籍添加成功\n");
@@ -245,8 +195,7 @@ void QueryBook() {
             printf("书籍名称: %s\n", p->bookname);
             printf("书号: %d\n", p->id);
             printf("作者: %s\n", p->author);
-            printf("出版时间: %d/%d\n", p->year, p->month);
-            printf("书籍数量: %d\n", p->count);
+            printf("出版时间: %d年%d月\n", p->year, p->month);
             printf("**************************************************************\n");
             exist = 1;//1表示已找到书籍
             break;
@@ -313,7 +262,7 @@ void ModifyBookInfo() {
     Book *p;
     char bookAuthur[Maxsize], title[Maxsize];
     int exist = 0, end = 0;
-    int bYear, bMonth, bID, count;
+    int bYear, bMonth, bID;
 
     p = bookHead;
     printf("书籍列表:\n");
@@ -352,8 +301,7 @@ void ModifyBookInfo() {
         printf("1.修改书籍名称\n");
         printf("2.修改书籍图书号\n");
         printf("3.修改书籍日期\n");
-        printf("4.修改书籍数量\n");
-        printf("5.修改书籍作者\n");
+        printf("4.修改书籍作者\n");
         printf("0.退出\n");
         printf("**************************************************************");
         printf("\n\n\n");
@@ -385,13 +333,6 @@ void ModifyBookInfo() {
                     printf("修改成功！\n");
                     break;
                 case 4:
-                    printf("输入你修改后的书籍数量: ");
-                    scanf("%d", &count);
-                    errorChecking(p->count, p->t, 1);
-                    p->count = count;
-                    printf("修改成功！\n");
-                    break;
-                case 5:
                     printf("输入你修改后的书籍作者: ");
                     scanf("%s", bookAuthur);
                     errorChecking(p->n, p->author, 2);
@@ -450,61 +391,34 @@ void changeThePassword() {
 
 //MARK: -管理员账户注册
 void adminRegister(){
-    Admin *p;
+//    Admin *p;
     char adminName[Maxsize];
     char adminPassword[Maxsize];
 
     system("cls");
-    if (adminCount == 0) {//第一次添加
-        adminHead = (Admin*)malloc(sizeof(Admin));
-        printf("\n\n\n");
-        printf("管理员姓名: ");
-        while (gets(adminName)) {
-            if (strlen(adminName) < Maxsize) {
-                break;
-            } else {
-                printf("账号名称过长！");
-                printf("管理员姓名:");
-            }
+    adminHead = (Admin*)malloc(sizeof(Admin));
+    printf("\n\n\n");
+    printf("管理员姓名: ");
+    while (gets(adminName)) {
+        if (strlen(adminName) < Maxsize) {
+            break;
+        } else {
+            printf("账号名称过长！");
+            printf("管理员姓名:");
         }
-        strcpy(adminHead->adminName, adminName);
-        printf("密码: ");
-        while (gets(adminPassword)) {
-            if (strlen(adminPassword) < Maxsize) {
-                break;
-            } else {
-                printf("密码长度过长！");
-            }
-        }
-        strcpy(adminHead->password, adminPassword);
-        adminEnd = adminHead;
-        adminEnd->next = NULL;
-    } else {
-        p = (struct AdminInfo *)malloc(sizeof(struct AdminInfo));
-        printf("管理员姓名: ");
-        while (gets(adminName)) {
-            if (strlen(adminName) < Maxsize) {
-                break;
-            } else {
-                printf("账号名称过长！");
-                printf("管理员姓名:");
-            }
-        }
-        strcpy(p->adminName, adminName);
-        printf("管理员密码: ");
-        while (gets(adminPassword)) {
-            if (strlen(adminPassword) < Maxsize) {
-                break;
-            } else {
-                printf("密码长度过长！");
-            }
-        }
-        strcpy(p->password, adminPassword);
-        adminEnd->next = p;
-        adminEnd = p;
-        adminEnd->next = NULL;
     }
-    adminCount++;
+    strcpy(adminHead->adminName, adminName);
+    printf("密码: ");
+    while (gets(adminPassword)) {
+        if (strlen(adminPassword) < Maxsize) {
+            break;
+        } else {
+            printf("密码长度过长！");
+        }
+    }
+    strcpy(adminHead->password, adminPassword);
+    adminEnd = adminHead;
+    adminEnd->next = NULL;
 
     writeFile(1);
 
