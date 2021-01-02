@@ -193,7 +193,7 @@ void QueryBook() {
     p = bookHead;
     while (p != NULL) {
         if (p->id == xID) {
-            printf("**************************************************************");
+            printf("**************************************************************\n");
             printf("书籍名称: %s\n", p->bookname);
             printf("书号: %d\n", p->id);
             printf("作者: %s\n", p->author);
@@ -251,11 +251,11 @@ void DeleteBookInfo() {
 //删除书籍
     q = bookHead;
     if (bID == q->id){
-        bookHead = bookHead->next;//删除链表内元素
+        free(q);
+        q = q->next;//删除链表内元素
     }
-    printf("%s删除成功！\n", q->bookname);
-    q = NULL;
     writeFile(2);//写入文件
+    printf("删除成功！\n");
     logtime('.', 6);
 }
 
